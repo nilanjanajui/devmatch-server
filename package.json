@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "better-auth": "^1.6.11",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mongodb": "^7.2.0",
+    "mongoose": "^9.6.3"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^10.4.0",
+    "nodemon": "^3.1.14"
+  },
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "seed": "node seed/seed.js"
+  }
+}
