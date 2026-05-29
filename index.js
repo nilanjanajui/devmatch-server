@@ -24,6 +24,11 @@ app.use(
   })
 );
 
+app.post("/api/auth/clear-jwt", (req, res) => {
+  res.clearCookie("jwt", { path: "/" });
+  res.json({ message: "JWT cleared." });
+});
+
 // Better Auth handler — MUST come before express.json()
 app.all("/api/auth/*splat", toNodeHandler(auth));
 

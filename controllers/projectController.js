@@ -15,6 +15,9 @@ const getAllProjects = async (req, res) => {
         if (category) query.category = category;
         if (difficulty) query.difficulty = difficulty;
         if (teamSize) query.teamSize = { $lte: parseInt(teamSize) };
+        if (req.query.mine === "true" && req.user) {
+            query.ownerId = req.user.id;
+        }
 
         const skip = (parseInt(page) - 1) * parseInt(limit);
         const total = await Project.countDocuments(query);
