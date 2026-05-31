@@ -10,6 +10,7 @@ const db = client.db();
 const auth = betterAuth({
     database: mongodbAdapter(db),
     secret: process.env.BETTER_AUTH_SECRET,
+    baseURL: process.env.BETTER_AUTH_URL,
     emailAndPassword: {
         enabled: true,
         minPasswordLength: 6,
@@ -25,6 +26,13 @@ const auth = betterAuth({
         },
     },
     trustedOrigins: [process.env.CLIENT_URL],
+    // Required for cross-domain cookies (Vercel frontend ↔ Render backend)
+    advanced: {
+        defaultCookieAttributes: {
+            sameSite: "none",
+            secure: true,
+        },
+    },
 });
 
 module.exports = auth;
