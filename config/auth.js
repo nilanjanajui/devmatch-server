@@ -25,7 +25,10 @@ const auth = betterAuth({
             clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
         },
     },
-    trustedOrigins: [process.env.CLIENT_URL],
+    trustedOrigins: [
+        process.env.CLIENT_URL,
+        "http://localhost:3000",
+    ].filter(Boolean),
     // Required for cross-domain cookies (Vercel frontend ↔ Render backend)
     advanced: {
         defaultCookieAttributes: {
