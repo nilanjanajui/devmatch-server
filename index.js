@@ -25,7 +25,12 @@ app.use(
 );
 
 app.post("/api/auth/clear-jwt", (req, res) => {
-  res.clearCookie("jwt", { path: "/" });
+  res.clearCookie("jwt", {
+    path: "/",
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  });
   res.json({ message: "JWT cleared." });
 });
 
