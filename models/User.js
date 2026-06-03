@@ -9,7 +9,12 @@ const userSchema = new mongoose.Schema(
         github: { type: String, default: "" },
         linkedin: { type: String, default: "" },
         portfolio: { type: String, default: "" },
-        skills: [{ type: String }],
+        skills: [
+            {
+                name: { type: String, required: true },
+                level: { type: String, default: "Intermediate" },
+            }
+        ],
         experienceLevel: {
             type: String,
             enum: ["Beginner", "Intermediate", "Professional", "Expert"],
