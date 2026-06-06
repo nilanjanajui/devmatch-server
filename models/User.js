@@ -6,6 +6,8 @@ const userSchema = new mongoose.Schema(
         email: { type: String, required: true, unique: true },
         image: { type: String, default: "" },
         bio: { type: String, default: "" },
+        title: { type: String, default: "" },
+        location: { type: String, default: "" },
         github: { type: String, default: "" },
         linkedin: { type: String, default: "" },
         portfolio: { type: String, default: "" },
@@ -13,6 +15,21 @@ const userSchema = new mongoose.Schema(
             {
                 name: { type: String, required: true },
                 level: { type: String, default: "Intermediate" },
+            }
+        ],
+        experienceEntries: [
+            {
+                role: { type: String, default: "" },
+                company: { type: String, default: "" },
+                period: { type: String, default: "" },
+                description: { type: String, default: "" },
+            }
+        ],
+        testimonials: [
+            {
+                quote: { type: String, default: "" },
+                authorName: { type: String, default: "" },
+                authorRole: { type: String, default: "" },
             }
         ],
         experienceLevel: {
