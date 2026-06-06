@@ -1,11 +1,12 @@
 const mongoose = require("mongoose");
-const User = require("../models/User");
+const User    = require("../models/User");
 const Project = require("../models/Project");
 
 const EMPTY_PROFILE = (id) => ({
     _id: id, name: "", image: "", bio: "",
     title: "", location: "",
     github: "", linkedin: "", portfolio: "",
+    collaborations: 0, contributionScore: "", followers: 0,
     skills: [], experienceEntries: [], testimonials: [],
 });
 
@@ -17,11 +18,11 @@ const getUserProfile = async (req, res) => {
         }
 
         const user = await User.findById(req.params.id).select(
-            "name image bio title location github linkedin portfolio skills experienceEntries testimonials createdAt"
+            "name image bio title location github linkedin portfolio collaborations contributionScore followers skills experienceEntries testimonials createdAt"
         );
 
         const projects = await Project.find({ ownerId: req.params.id })
-            .select("title tagline category difficulty techStack status createdAt")
+            .select("title tagline category difficulty techStack image status createdAt")
             .sort({ createdAt: -1 })
             .limit(6);
 
@@ -42,6 +43,7 @@ const updateProfile = async (req, res) => {
             "name", "bio", "image",
             "title", "location",
             "github", "linkedin", "portfolio",
+            "collaborations", "contributionScore", "followers",
             "skills", "experienceEntries", "testimonials",
             "experienceLevel",
         ];
