@@ -10,6 +10,7 @@ const auth = require("./config/auth");
 const projectRoutes = require("./routes/projectRoutes");
 const applicationRoutes = require("./routes/applicationRoutes");
 const userRoutes = require("./routes/userRoutes");
+const postRoutes = require("./routes/postRoutes");
 
 const app = express();
 
@@ -55,6 +56,7 @@ app.use(cookieParser());
 app.use("/api/projects", projectRoutes);
 app.use("/api/applications", applicationRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/posts", postRoutes);
 
 // Health check
 app.get("/", (req, res) => res.send("DevMatch API is running"));
