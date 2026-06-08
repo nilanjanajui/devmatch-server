@@ -2,50 +2,41 @@ const mongoose = require("mongoose");
 const User    = require("../models/User");
 const Project = require("../models/Project");
 
-const EMPTY_PROFILE = (id) => ({
-    _id: id, name: "", image: "", bio: "",
-    title: "", location: "",
-    github: "", linkedin: "", portfolio: "",
-    collaborations: 0, contributionScore: "", followers: 0,
-    skills: [], experienceEntries: [], testimonials: [],
+const EMPTY = (id) => ({
+    _id: id, name: "", image: "", bio: "", title: "", location: "",
+    github: "", linkedin: "", portfolio: "", isPro: false,
+    stats: { projectsCompleted: 0, collaborations: 0, contributionScore: 0, followers: 0 },
+    skillProficiency: [], skillTags: [],
+    experience: [], featuredProjects: [], testimonials: [],
 });
 
-// GET /api/users/:id — public profile + owned projects
+// GET /api/users/:id
 const getUserProfile = async (req, res) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-            return res.json({ ...EMPTY_PROFILE(req.params.id), projects: [] });
+            return res.json(EMPTY(req.params.id));
         }
 
         const user = await User.findById(req.params.id).select(
-            "name image bio title location github linkedin portfolio collaborations contributionScore followers skills experienceEntries testimonials createdAt"
+            "name image bio title location github linkedin portfolio isPro experienceLevel stats skillProficiency skillTags experience featuredProjects testimonials createdAt"
         );
 
-        const projects = await Project.find({ ownerId: req.params.id })
-            .select("title tagline category difficulty techStack image status createdAt")
-            .sort({ createdAt: -1 })
-            .limit(6);
+        if (!user) return res.json(EMPTY(req.params.id));
 
-        if (!user) {
-            return res.json({ ...EMPTY_PROFILE(req.params.id), projects });
-        }
-
-        res.json({ ...user.toObject(), projects });
+        res.json(user.toObject());
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 };
 
-// PATCH /api/users/profile — update own profile (protected)
+// PATCH /api/users/profile
 const updateProfile = async (req, res) => {
     try {
         const allowedFields = [
-            "name", "bio", "image",
-            "title", "location",
-            "github", "linkedin", "portfolio",
-            "collaborations", "contributionScore", "followers",
-            "skills", "experienceEntries", "testimonials",
-            "experienceLevel",
+            "name", "bio", "image", "title", "location",
+            "github", "linkedin", "portfolio", "isPro", "experienceLevel",
+            "stats", "skillProficiency", "skillTags",
+            "experience", "featuredProjects", "testimonials",
         ];
 
         const updates = {};

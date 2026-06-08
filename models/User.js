@@ -2,26 +2,40 @@ const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
     {
-        name:             { type: String, required: true },
-        email:            { type: String, required: true, unique: true },
-        image:            { type: String, default: "" },
-        bio:              { type: String, default: "" },
-        title:            { type: String, default: "" },
-        location:         { type: String, default: "" },
-        github:           { type: String, default: "" },
-        linkedin:         { type: String, default: "" },
-        portfolio:        { type: String, default: "" },
-        collaborations:   { type: Number, default: 0 },
-        contributionScore:{ type: String, default: "" },
-        followers:        { type: Number, default: 0 },
-        skills: [
+        name:     { type: String, required: true },
+        email:    { type: String, required: true, unique: true },
+        image:    { type: String, default: "" },
+        bio:      { type: String, default: "" },
+        title:    { type: String, default: "" },
+        location: { type: String, default: "" },
+        github:   { type: String, default: "" },
+        linkedin: { type: String, default: "" },
+        portfolio:{ type: String, default: "" },
+        isPro:    { type: Boolean, default: false },
+
+        experienceLevel: {
+            type: String,
+            enum: ["Beginner", "Intermediate", "Professional", "Expert"],
+            default: "Beginner",
+        },
+
+        stats: {
+            projectsCompleted: { type: Number, default: 0 },
+            collaborations:    { type: Number, default: 0 },
+            contributionScore: { type: Number, default: 0 },
+            followers:         { type: Number, default: 0 },
+        },
+
+        skillProficiency: [
             {
-                name:       { type: String, required: true },
-                level:      { type: String, default: "Intermediate" },
-                percentage: { type: Number, default: 0 },  // ← for progress bars
+                name:        { type: String, required: true },
+                proficiency: { type: Number, default: 0 },   // 0–100
             }
         ],
-        experienceEntries: [
+
+        skillTags: [{ type: String }],
+
+        experience: [
             {
                 role:        { type: String, default: "" },
                 company:     { type: String, default: "" },
@@ -29,18 +43,24 @@ const userSchema = new mongoose.Schema(
                 description: { type: String, default: "" },
             }
         ],
-        testimonials: [
+
+        featuredProjects: [
             {
-                quote:      { type: String, default: "" },
-                authorName: { type: String, default: "" },
-                authorRole: { type: String, default: "" },
+                title:       { type: String, default: "" },
+                description: { type: String, default: "" },
+                tags:        [{ type: String }],
+                image:       { type: String, default: "" },
             }
         ],
-        experienceLevel: {
-            type: String,
-            enum: ["Beginner", "Intermediate", "Professional", "Expert"],
-            default: "Beginner",
-        },
+
+        testimonials: [
+            {
+                quote:  { type: String, default: "" },
+                author: { type: String, default: "" },
+                role:   { type: String, default: "" },
+                avatar: { type: String, default: "" },
+            }
+        ],
     },
     { timestamps: true }
 );
