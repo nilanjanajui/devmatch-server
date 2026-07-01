@@ -700,7 +700,7 @@ const developers = [
         ],
         featuredProjects: [
             { title: "FlowState Analytics", description: "Full-stack privacy-first analytics platform built with Next.js and Supabase — self-hosted and deployable in under 10 minutes.", tags: ["NEXT.JS", "TYPESCRIPT", "SUPABASE"], image: "https://picsum.photos/seed/flowstate1/800/400" },
-            { title: "StellarAuth SDK", description: "Developer dashboard and documentation portal for the StellarAuth SDK, built with Next.js and deployed to the Vercel edge.", tags: ["NEXT.JS", "TAILWINDCSS", "VERCEL"], image: "https://picsum.photos/seed/stellar1/800/400" },
+            { title: "StellarAuth SDK", description: "Developer dashboard and documentation portal for the StellarAuth SDK, built with Next.js and deployed to the Vercel edge.", tags: ["NEXT.JS", "TAILWINDCSS", "VERCEL"], image: "https://picsum.photos/seed/flowstate1/800/400" },
         ],
         testimonials: [
             { quote: "Sofia shipped our entire MVP while I was still writing the PRD. She makes the right decisions fast. Essential co-founder material.", author: "Mikkel Hansen", role: "CEO, FORMFLOW", avatar: "MH" },
@@ -735,7 +735,7 @@ const developers = [
         ],
         featuredProjects: [
             { title: "Micro-Orch Kernel", description: "ARM Cortex-M4 implementation of the Micro-Orch agent running full workload scheduling in 64MB RAM.", tags: ["C", "RUST", "FREERTOS"], image: "https://picsum.photos/seed/microorch1/800/400" },
-            { title: "Nexus Protocol Engine", description: "Minimal-footprint Rust client for the Nexus settlement protocol compiled for ESP32-based edge nodes.", tags: ["RUST", "C", "MQTT"], image: "https://picsum.photos/seed/nexus1/800/400" },
+            { title: "Nexus Protocol Engine", description: "Minimal-footprint Rust client for the Nexus settlement protocol compiled for ESP32-based edge nodes.", tags: ["RUST", "C", "MQTT"], image: "https://picsum.photos/seed/microorch1/800/400" },
         ],
         testimonials: [
             { quote: "Lucas wrote firmware handling 12 concurrent sensor streams in 8KB of RAM. The elegance of that code is something I show every new hire.", author: "Antoine Girard", role: "VP EMBEDDED, STMICRO", avatar: "AG" },
@@ -1227,7 +1227,6 @@ const seed = async () => {
     const createdProjects = [];
 
     for (let i = 0; i < projectPool.length; i++) {
-        // Assign each project to a different user
         const owner = createdUsers[i % createdUsers.length];
         const project = new Project({
             ...projectPool[i],
@@ -1247,7 +1246,6 @@ const seed = async () => {
     const appliedPairs = new Set();
 
     for (const user of createdUsers) {
-        // Each user applies to 3 projects they don't own
         const eligibleProjects = createdProjects.filter(
             (p) => p.ownerId.toString() !== user._id.toString()
         );
@@ -1259,6 +1257,9 @@ const seed = async () => {
             if (appliedPairs.has(key)) continue;
             appliedPairs.add(key);
 
+            // ✅ FIX: was user.skills (doesn't exist) — now uses user.skillTags
+            const topSkills = (user.skillTags ?? []).slice(0, 2).join(" and ");
+
             const application = new Application({
                 projectId: project._id,
                 applicantId: user._id,
@@ -1268,7 +1269,7 @@ const seed = async () => {
                 experience: user.experienceLevel,
                 github: user.github,
                 portfolio: user.portfolio,
-                message: `Hi, I am ${user.name}. I have strong experience in ${user.skills.slice(0, 2).join(" and ")} and I am excited to contribute to ${project.title}. My background in ${user.experienceLevel.toLowerCase()} level development makes me a strong fit for this role. I would love to bring my skills to your team.`,
+                message: `Hi, I am ${user.name}. I have strong experience in ${topSkills} and I am excited to contribute to ${project.title}. My background in ${user.experienceLevel.toLowerCase()} level development makes me a strong fit for this role. I would love to bring my skills to your team.`,
                 status: getRandom(["pending", "pending", "accepted", "rejected"]),
             });
 
