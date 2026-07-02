@@ -11,6 +11,7 @@ const projectRoutes = require("./routes/projectRoutes");
 const applicationRoutes = require("./routes/applicationRoutes");
 const userRoutes = require("./routes/userRoutes");
 const postRoutes = require("./routes/postRoutes");
+const analyticsRoutes = require("./routes/analyticsRoutes");
 
 const app = express();
 
@@ -57,6 +58,7 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/applications", applicationRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
+app.use("/api/analytics", analyticsRoutes);
 
 // Health check
 app.get("/", (req, res) => res.send("DevMatch API is running"));
